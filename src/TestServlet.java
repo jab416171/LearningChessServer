@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import edu.neumont.learningChess.api.ChessGameState;
+import edu.neumont.learningChess.api.ExtendedMove;
+import edu.neumont.learningChess.api.Move;
 import edu.neumont.learningChess.engine.GameStateHistory;
 import edu.neumont.learningChess.engine.LearningEngine;
 
@@ -23,7 +26,7 @@ public class TestServlet extends HttpServlet {
 	
 	private enum Paths
 	{
-		analyzehistory, getmove, postdatatofacebook, getusestats, gettopscores, ping, noValue;
+		analyzehistory, getmove, /*postdatatofacebook, getusestats, gettopscores,*/ ping, noValue;
 		
 		public static Paths toPath(String path) {
 			try
@@ -74,26 +77,6 @@ public class TestServlet extends HttpServlet {
 					evaluatePlayedGame(context, request);
 					break;
 				
-				case gettopscores:
-					double[] temp = getTopScores((Integer) context.getAttribute("Scores"));
-					JSONArray jsonArray = new JSONArray();
-					for (double d : temp)
-					{
-						jsonArray.put(d);
-					}
-					
-					responseString = jsonArray.toString();
-					break;
-				
-				case getusestats:
-					responseString = getUserStats((Integer) context.getAttribute("UserId")).toString();
-					break;
-				
-				case postdatatofacebook:
-					responseString = "done";
-					postDataToFacebook( request.getReader());
-					break;
-					
 				case ping:
 					responseString = "you have pinged the server's servlet";
 					break;
@@ -128,8 +111,7 @@ public class TestServlet extends HttpServlet {
 		context.log("history request: "+jsonString);
 		
 		//TODO need to get method from Greg
-		List<Move> jsonState = (List<Move>) JSONFactory.createMoveHistoryFromJSON(jsonString);
-		
+		List<ExtendedMove> jsonState = (List<ExtendedMove>) JSONFactory.createMoveHistoryFromJSON(jsonString);
 		
 		GameStateHistory gameStateHistory = new GameStateHistory(jsonState);// = json.getGameState();
 		
@@ -147,7 +129,7 @@ public class TestServlet extends HttpServlet {
 		JSONState jsonState = JSONFactory.createJSONStateFromJSON(jsonString);
 		context.log("state created");
 		
-		GameState gameState = jsonState.getGameState();
+		ChessGameState gameState = jsonState.getGameState();
 		context.log("got game state");
 		LearningEngine learningEngine = (LearningEngine) context.getAttribute(LEARNING_ENGINE);
 		context.log("got engine");
