@@ -38,7 +38,7 @@ public class LearningEngineServletContextListener implements ServletContextListe
 			
 		} catch (Throwable e)
 		{
-			LearningEngine.create(fileName, RECORD_SIZE, Integer.parseInt(cacheSize));
+			LearningEngine.create(fileName, Integer.parseInt(cacheSize));
 			learningEngine = LearningEngine.open(fileName);
 		}
 		
