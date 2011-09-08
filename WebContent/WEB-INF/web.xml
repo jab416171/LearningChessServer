@@ -26,7 +26,7 @@
     </context-param>
     <context-param>
       <param-name>CACHE_SIZE</param-name>
-      <param-value>10</param-value>
+      <param-value>100</param-value>
     </context-param>
   <listener>
   	<listener-class>

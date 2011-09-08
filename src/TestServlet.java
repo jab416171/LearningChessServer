@@ -52,6 +52,7 @@ public class TestServlet extends HttpServlet {
 		String realPath = getServletContext().getRealPath("index.jsp");
 		Scanner fileScanner = new Scanner(new FileInputStream(new File(realPath)));
 		StringBuilder stringBuilder = new StringBuilder();
+		request.getSession().getServletContext().log("In do get");
 		while(fileScanner.hasNextLine()) {
 			stringBuilder.append(fileScanner.nextLine()+"\r\n");
 		}
@@ -80,8 +81,7 @@ public class TestServlet extends HttpServlet {
 					break;
 
 				case analyzehistory :
-					analyzeGameHistory(context, request);
-					responseString = "";
+					responseString = ""+analyzeGameHistory(context, request);
 					break;
 					
 				case getgamestateinfo:
@@ -126,14 +126,14 @@ public class TestServlet extends HttpServlet {
 		return Jsonizer.jsonize(gameStateInfo);
 	}
 
-	private void analyzeGameHistory(ServletContext context, HttpServletRequest request) throws IOException {
+	private int analyzeGameHistory(ServletContext context, HttpServletRequest request) throws IOException {
 		context.log("Analyzing history...");
 		String jsonString = getPostBody(request.getReader());
 		context.log("Request: " + jsonString);
 		MoveHistory gameStateHistory = Jsonizer.dejsonize(jsonString, MoveHistory.class);
 		
 		LearningEngine learningEngine = (LearningEngine) context.getAttribute(LEARNING_ENGINE);
-		learningEngine.analyzeGameHistory(gameStateHistory);
+		return learningEngine.analyzeGameHistory(gameStateHistory);
 	}
 
 	private String getMoveFromLearningEngine(ServletContext context, HttpServletRequest request) throws IOException {
