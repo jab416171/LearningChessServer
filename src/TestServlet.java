@@ -72,6 +72,7 @@ public class TestServlet extends HttpServlet {
 		ServletContext context = request.getSession().getServletContext();
 		String responseString = null;
 		context.log("Method:" + urlString);
+		context.log("Web-Inf Path:" + context.getRealPath("/WEB-INF/"));
 		try {
 			// switch on the url
 			switch (Paths.toPath(urlString)) {
