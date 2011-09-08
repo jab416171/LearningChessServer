@@ -65,19 +65,18 @@ public class TestServlet extends HttpServlet {
 	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// need to get the url our of the request
+		// need to get the url out of the request
 		StringBuffer requestURLBuffer = request.getRequestURL();
 		String requestURL = requestURLBuffer.toString();
 		String urlString = requestURL.substring(requestURL.lastIndexOf("/")+1);
 		ServletContext context = request.getSession().getServletContext();
 		String responseString = null;
-		context.log("Method:" + urlString);
-		context.log("Web-Inf Path:" + context.getRealPath("/WEB-INF/"));
+		context.log("Method: " + urlString);
 		try {
 			// switch on the url
 			switch (Paths.toPath(urlString)) {
 				case getmove :
-					responseString = getMoveFromLearningCenter(context, request);
+					responseString = getMoveFromLearningEngine(context, request);
 					break;
 
 				case analyzehistory :
@@ -109,7 +108,7 @@ public class TestServlet extends HttpServlet {
 		}
 
 		context.log("ResponseString: " + responseString);
-		context.log("Server Activity: Finished Method");
+		context.log("Server Activity: Finished DoPost");
 
 		PrintWriter writer = response.getWriter();
 		writer.println(responseString);
@@ -128,14 +127,16 @@ public class TestServlet extends HttpServlet {
 	}
 
 	private void analyzeGameHistory(ServletContext context, HttpServletRequest request) throws IOException {
+		context.log("Analyzing history...");
 		String jsonString = getPostBody(request.getReader());
+		context.log("Request: " + jsonString);
 		MoveHistory gameStateHistory = Jsonizer.dejsonize(jsonString, MoveHistory.class);
 		
 		LearningEngine learningEngine = (LearningEngine) context.getAttribute(LEARNING_ENGINE);
 		learningEngine.analyzeGameHistory(gameStateHistory);
 	}
 
-	private String getMoveFromLearningCenter(ServletContext context, HttpServletRequest request) throws IOException {
+	private String getMoveFromLearningEngine(ServletContext context, HttpServletRequest request) throws IOException {
 		String jsonString = getPostBody(request.getReader());
 
 		context.log("getmove request: " + jsonString);
