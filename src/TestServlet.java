@@ -32,7 +32,7 @@ public class TestServlet extends HttpServlet {
 		analyzehistory, getmove, /*
 								 * postdatatofacebook, getusestats,
 								 * gettopscores,
-								 */ping, getGameStateInfo, noValue;
+								 */ping, getgamestateinfo, noValue;
 
 		public static Paths toPath(String path) {
 			try {
@@ -85,7 +85,7 @@ public class TestServlet extends HttpServlet {
 					responseString = "";
 					break;
 					
-				case getGameStateInfo:
+				case getgamestateinfo:
 					responseString = getGameStateInfo(context, request);
 					break;
 
