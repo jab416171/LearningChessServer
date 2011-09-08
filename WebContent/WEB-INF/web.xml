@@ -14,9 +14,23 @@
     <display-name>MainServlet</display-name>
     <servlet-name>TestServlet</servlet-name>
     <servlet-class>TestServlet</servlet-class>
+    
   </servlet>
   <servlet-mapping>
     <servlet-name>TestServlet</servlet-name>
     <url-pattern>/*</url-pattern>
   </servlet-mapping>
+   <context-param>
+      <param-name>FILE_NAME</param-name>
+      <param-value>LearningEnginePersistence</param-value>
+    </context-param>
+    <context-param>
+      <param-name>CACHE_SIZE</param-name>
+      <param-value>10</param-value>
+    </context-param>
+  <listener>
+  	<listener-class>
+  		LearningEngineServletContextListener
+  	</listener-class>
+  </listener>
 </web-app>

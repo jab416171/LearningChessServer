@@ -1,7 +1,9 @@
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
@@ -63,14 +65,13 @@ public class TestServlet extends HttpServlet {
 	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
 		// need to get the url our of the request
 		StringBuffer requestURLBuffer = request.getRequestURL();
 		String requestURL = requestURLBuffer.toString();
 		String urlString = requestURL.substring(requestURL.lastIndexOf("/")+1);
 		ServletContext context = request.getSession().getServletContext();
 		String responseString = null;
-
+		context.log("Method:" + urlString);
 		try {
 			// switch on the url
 			switch (Paths.toPath(urlString)) {
@@ -100,8 +101,10 @@ public class TestServlet extends HttpServlet {
 					break;
 			}
 		} catch (Exception e) {
-			context.log("POST Exception: " + e.getMessage());
-			context.log(e.getStackTrace().toString());
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			PrintStream printStream = new PrintStream(bos);
+			e.printStackTrace(printStream);
+			context.log(bos.toString());
 		}
 
 		context.log("ResponseString: " + responseString);

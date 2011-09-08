@@ -21,8 +21,9 @@ public class LearningEngineServletContextListener implements ServletContextListe
 	
 	@Override
 	public void contextInitialized(ServletContextEvent contextEvent) {
-		
 		ServletContext context = contextEvent.getServletContext();
+		
+		context.log("Initializing the context");
 		String fileName = context.getInitParameter("FILE_NAME");
 		String cacheSize = context.getInitParameter("CACHE_SIZE");
 		
@@ -41,6 +42,8 @@ public class LearningEngineServletContextListener implements ServletContextListe
 			LearningEngine.create(fileName, Integer.parseInt(cacheSize));
 			learningEngine = LearningEngine.open(fileName);
 		}
+		
+		context.log("Learning engine is set up!");
 		
 		context.setAttribute(LEARNING_ENGINE, learningEngine);
 		
