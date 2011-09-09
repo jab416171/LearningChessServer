@@ -25,6 +25,9 @@ import edu.neumont.learningChess.model.Move;
  */
 public class TestServlet extends HttpServlet {
 
+	private static final boolean LOG_VERBOSE = false;
+	private static final boolean LOG_ERROR = true;
+
 	private static final String LEARNING_ENGINE = "LearningEngine";
 	private static final long serialVersionUID = 1L;
 
@@ -52,9 +55,11 @@ public class TestServlet extends HttpServlet {
 		String realPath = getServletContext().getRealPath("index.jsp");
 		Scanner fileScanner = new Scanner(new FileInputStream(new File(realPath)));
 		StringBuilder stringBuilder = new StringBuilder();
-		request.getSession().getServletContext().log("In do get");
-		while(fileScanner.hasNextLine()) {
-			stringBuilder.append(fileScanner.nextLine()+"\r\n");
+		if (LOG_VERBOSE) {
+			request.getSession().getServletContext().log("In do get");
+		}
+		while (fileScanner.hasNextLine()) {
+			stringBuilder.append(fileScanner.nextLine() + "\r\n");
 		}
 		response.getWriter().println(stringBuilder.toString());
 
@@ -69,10 +74,12 @@ public class TestServlet extends HttpServlet {
 		// need to get the url out of the request
 		StringBuffer requestURLBuffer = request.getRequestURL();
 		String requestURL = requestURLBuffer.toString();
-		String urlString = requestURL.substring(requestURL.lastIndexOf("/")+1);
+		String urlString = requestURL.substring(requestURL.lastIndexOf("/") + 1);
 		ServletContext context = request.getSession().getServletContext();
 		String responseString = null;
-		context.log("Method: " + urlString);
+		if (LOG_VERBOSE) {
+			context.log("Method: " + urlString);
+		}
 		try {
 			// switch on the url
 			switch (Paths.toPath(urlString)) {
@@ -81,10 +88,10 @@ public class TestServlet extends HttpServlet {
 					break;
 
 				case analyzehistory :
-					responseString = ""+analyzeGameHistory(context, request);
+					responseString = "" + analyzeGameHistory(context, request);
 					break;
-					
-				case getgamestateinfo:
+
+				case getgamestateinfo :
 					responseString = getGameStateInfo(context, request);
 					break;
 
@@ -100,16 +107,18 @@ public class TestServlet extends HttpServlet {
 					responseString = "Unrecognized Action";
 					break;
 			}
-		} catch (Exception e) {
-			ByteArrayOutputStream bos = new ByteArrayOutputStream();
-			PrintStream printStream = new PrintStream(bos);
-			e.printStackTrace(printStream);
-			context.log(bos.toString());
+		} catch (Throwable t) {
+			if (LOG_ERROR) {
+				ByteArrayOutputStream bos = new ByteArrayOutputStream();
+				PrintStream printStream = new PrintStream(bos);
+				t.printStackTrace(printStream);
+				context.log(bos.toString());
+			}
 		}
-
-		context.log("ResponseString: " + responseString);
-		context.log("Server Activity: Finished DoPost");
-
+		if (LOG_VERBOSE) {
+			context.log("ResponseString: " + responseString);
+			context.log("Server Activity: Finished DoPost");
+		}
 		PrintWriter writer = response.getWriter();
 		writer.println(responseString);
 		writer.flush();
@@ -120,18 +129,22 @@ public class TestServlet extends HttpServlet {
 		String jsonString = getPostBody(request.getReader());
 		ChessGameState chessGameState = Jsonizer.dejsonize(jsonString, ChessGameState.class);
 		LearningEngine learningEngine = (LearningEngine) context.getAttribute(LEARNING_ENGINE);
-		
+
 		GameStateInfo gameStateInfo = learningEngine.getGameStateInfo(chessGameState);
-		
+
 		return Jsonizer.jsonize(gameStateInfo);
 	}
 
 	private int analyzeGameHistory(ServletContext context, HttpServletRequest request) throws IOException {
-		context.log("Analyzing history...");
+		if (LOG_VERBOSE) {
+			context.log("Analyzing history...");
+		}
 		String jsonString = getPostBody(request.getReader());
-		context.log("Request: " + jsonString);
+		if (LOG_VERBOSE) {
+			context.log("Request: " + jsonString);
+		}
 		MoveHistory gameStateHistory = Jsonizer.dejsonize(jsonString, MoveHistory.class);
-		
+
 		LearningEngine learningEngine = (LearningEngine) context.getAttribute(LEARNING_ENGINE);
 		return learningEngine.analyzeGameHistory(gameStateHistory);
 	}
@@ -139,14 +152,22 @@ public class TestServlet extends HttpServlet {
 	private String getMoveFromLearningEngine(ServletContext context, HttpServletRequest request) throws IOException {
 		String jsonString = getPostBody(request.getReader());
 
-		context.log("getmove request: " + jsonString);
+		if (LOG_VERBOSE) {
+			context.log("getmove request: " + jsonString);
+		}
 		ChessGameState gameState = Jsonizer.dejsonize(jsonString, ChessGameState.class);
-		context.log("state created");
-		context.log("got game state");
+		if (LOG_VERBOSE) {
+			context.log("state created");
+			context.log("got game state");
+		}
 		LearningEngine learningEngine = (LearningEngine) context.getAttribute(LEARNING_ENGINE);
-		context.log("got engine");
+		if (LOG_VERBOSE) {
+			context.log("got engine");
+		}
 		Move gameMove = learningEngine.getMove(gameState);
-		context.log("got move");
+		if (LOG_VERBOSE) {
+			context.log("got move");
+		}
 
 		return Jsonizer.jsonize(gameMove);
 	}
