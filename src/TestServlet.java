@@ -33,8 +33,7 @@ public class TestServlet extends HttpServlet {
 
 	private enum Paths {
 		analyzehistory, getmove, /*
-								 * postdatatofacebook, getusestats,
-								 * gettopscores,
+								 * postdatatofacebook, getusestats, gettopscores,
 								 */ping, getgamestateinfo, noValue;
 
 		public static Paths toPath(String path) {
@@ -47,8 +46,7 @@ public class TestServlet extends HttpServlet {
 	}
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -66,62 +64,61 @@ public class TestServlet extends HttpServlet {
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// need to get the url out of the request
-		StringBuffer requestURLBuffer = request.getRequestURL();
-		String requestURL = requestURLBuffer.toString();
-		String urlString = requestURL.substring(requestURL.lastIndexOf("/") + 1);
-		ServletContext context = request.getSession().getServletContext();
-		String responseString = null;
-		if (LOG_VERBOSE) {
-			context.log("Method: " + urlString);
-		}
-		try {
-			// switch on the url
-			switch (Paths.toPath(urlString)) {
-				case getmove :
-					responseString = getMoveFromLearningEngine(context, request);
-					break;
-
-				case analyzehistory :
-					responseString = "" + analyzeGameHistory(context, request);
-					break;
-
-				case getgamestateinfo :
-					responseString = getGameStateInfo(context, request);
-					break;
-
-				case ping :
-					responseString = "you have pinged the server's servlet";
-					break;
-
-				case noValue :
-					responseString = "Unrecognized Action";
-					break;
-
-				default :
-					responseString = "Unrecognized Action";
-					break;
-			}
-		} catch (Throwable t) {
-			if (LOG_ERROR) {
-				ByteArrayOutputStream bos = new ByteArrayOutputStream();
-				PrintStream printStream = new PrintStream(bos);
-				t.printStackTrace(printStream);
-				context.log(bos.toString());
-			}
-		}
-		if (LOG_VERBOSE) {
-			context.log("ResponseString: " + responseString);
-			context.log("Server Activity: Finished DoPost");
-		}
-		PrintWriter writer = response.getWriter();
-		writer.println(responseString);
-		writer.flush();
+//		StringBuffer requestURLBuffer = request.getRequestURL();
+//		String requestURL = requestURLBuffer.toString();
+//		String urlString = requestURL.substring(requestURL.lastIndexOf("/") + 1);
+//		ServletContext context = request.getSession().getServletContext();
+//		String responseString = null;
+//		if (LOG_VERBOSE) {
+//			context.log("Method: " + urlString);
+//		}
+//		try {
+//			// switch on the url
+//			switch (Paths.toPath(urlString)) {
+//				case getmove :
+//					responseString = getMoveFromLearningEngine(context, request);
+//					break;
+//
+//				case analyzehistory :
+//					responseString = "" + analyzeGameHistory(context, request);
+//					break;
+//
+//				case getgamestateinfo :
+//					responseString = getGameStateInfo(context, request);
+//					break;
+//
+//				case ping :
+//					responseString = "you have pinged the server's servlet";
+//					break;
+//
+//				case noValue :
+//					responseString = "Unrecognized Action";
+//					break;
+//
+//				default :
+//					responseString = "Unrecognized Action";
+//					break;
+//			}
+//		} catch (Throwable t) {
+//			if (LOG_ERROR) {
+//				ByteArrayOutputStream bos = new ByteArrayOutputStream();
+//				PrintStream printStream = new PrintStream(bos);
+//				t.printStackTrace(printStream);
+//				context.log(bos.toString());
+//			}
+//		}
+//		if (LOG_VERBOSE) {
+//			context.log("ResponseString: " + responseString);
+//			context.log("Server Activity: Finished DoPost");
+//		}
+//		PrintWriter writer = response.getWriter();
+//		writer.println(responseString);
+//		writer.flush();
 
 	}
 
@@ -183,5 +180,4 @@ public class TestServlet extends HttpServlet {
 		}
 		return builder.toString();
 	}
-
 }

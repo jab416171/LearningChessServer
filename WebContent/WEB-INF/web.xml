@@ -10,15 +10,31 @@
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
   <servlet>
-    <description></description>
-    <display-name>MainServlet</display-name>
-    <servlet-name>TestServlet</servlet-name>
-    <servlet-class>TestServlet</servlet-class>
-    
+  	<display-name>AnalyzeGameHistoryServlet</display-name>
+  	<servlet-name>AnalyzeGameHistoryServlet</servlet-name>
+  	<servlet-class>AnalyzeGameHistoryServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<display-name>GetMoveServlet</display-name>
+  	<servlet-name>GetMoveServlet</servlet-name>
+  	<servlet-class>GetMoveServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<display-name>GameStateInfoServlet</display-name>
+  	<servlet-name>GameStateInfoServlet</servlet-name>
+  	<servlet-class>GameStateInfoServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>TestServlet</servlet-name>
-    <url-pattern>/*</url-pattern>
+    <servlet-name>GameStateInfoServlet</servlet-name>
+    <url-pattern>/gamestateinfo</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>GetMoveServlet</servlet-name>
+    <url-pattern>/getmove</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AnalyzeGameHistoryServlet</servlet-name>
+    <url-pattern>/analyzehistory</url-pattern>
   </servlet-mapping>
    <context-param>
       <param-name>FILE_NAME</param-name>
