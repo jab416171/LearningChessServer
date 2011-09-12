@@ -15,7 +15,6 @@
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/gson-1.7.1.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ChessExtended"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/LearningChessServer"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/model.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/persistence.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
