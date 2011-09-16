@@ -1,0 +1,39 @@
+body {
+	font-family:Times New Roman;
+	background-repeat:no-repeat;
+	background-color: aqua;
+	}
+	
+	
+#table{
+	 width:75%;
+	 margin-right: auto;
+	 margin-left:auto;
+	 background-color: white;
+	}
+	
+h1 {
+      width: 250%;
+	  position: relative;
+	  color:white;
+	  background-color:#666677;
+	  font-family:Copperplate Gothic Bold;
+	  font-size: 50px;
+	  text-align: center;
+	  }
+	 
+#links {
+      padding: relative;
+	  text-align: center;
+      color:white;
+	  background-color:#222233;
+	  margin-right: auto;
+	  margin-left:auto;
+	  font-size: large;
+	  }
+	  
+#content{
+	    background-color:white;
+}
+	   
+	  
