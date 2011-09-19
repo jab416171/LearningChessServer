@@ -23,18 +23,35 @@ public class MainServlet extends HttpServlet {
 	public static final String dbClass = "com.mysql.jdbc.Driver";
 
 	public static String MD5(String str) {
-		String s = null;
+		MessageDigest md;
+		byte[] md5hash = new byte[32];
 		try {
-			byte[] bytesOfMessage = str.getBytes("UTF-8");
-			MessageDigest md = MessageDigest.getInstance("MD5");
-			byte[] thedigest = md.digest(bytesOfMessage);
-			s = new String(thedigest, "UTF-8");
+			md = MessageDigest.getInstance("MD5");
+			md.update(str.getBytes("iso-8859-1"), 0, str.length());
+			md5hash = md.digest();
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		return s;
+		return convertToHex(md5hash);
+
+	}
+
+	private static String convertToHex(byte[] data) {
+		StringBuffer buf = new StringBuffer();
+		for (int i = 0; i < data.length; i++) {
+			int halfbyte = (data[i] >>> 4) & 0x0F;
+			int two_halfs = 0;
+			do {
+				if ((0 <= halfbyte) && (halfbyte <= 9))
+					buf.append((char) ('0' + halfbyte));
+				else
+					buf.append((char) ('a' + (halfbyte - 10)));
+				halfbyte = data[i] & 0x0F;
+			} while (two_halfs++ < 1);
+		}
+		return buf.toString();
 	}
 
 	public static String getPostBody(BufferedReader reader) throws IOException {

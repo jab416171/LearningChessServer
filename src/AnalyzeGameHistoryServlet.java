@@ -79,7 +79,7 @@ public class AnalyzeGameHistoryServlet extends HttpServlet {
 			stmt.setDate(1, new java.sql.Date(datePlayed.getTimeInMillis()));
 			stmt.setString(2, whiteName);
 			stmt.setString(3, blackName);
-			stmt.setInt(4, winnerType.getValue());
+			stmt.setInt(4, winnerType == null ? -1 : winnerType.getValue());
 			stmt.setInt(5, moveCount);
 			stmt.executeUpdate();
 		} catch (ClassNotFoundException e) {
