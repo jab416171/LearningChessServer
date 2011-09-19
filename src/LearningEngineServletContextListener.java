@@ -3,12 +3,13 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import edu.neumont.learningChess.engine.LearningEngine;
+import edu.neumont.learningChess.engine.SerializedChessGameState;
 
 public class LearningEngineServletContextListener implements ServletContextListener {
 
 	private static final String LEARNING_ENGINE = "LearningEngine";
 	public static LearningEngine learningEngine = null;
-	private static final long RECORD_SIZE = 32; // TODO this needs to be fixed before intergration
+	private static final long RECORD_SIZE = SerializedChessGameState.getRecordSize();
 
 	@Override
 	public void contextDestroyed(ServletContextEvent contextEvent) {
@@ -26,6 +27,7 @@ public class LearningEngineServletContextListener implements ServletContextListe
 		if (learningEngine == null) {
 			String fileName = context.getInitParameter("FILE_NAME");
 			String cacheSize = context.getInitParameter("CACHE_SIZE");
+			String performInit = context.getInitParameter("performInitialization");
 			
 			context.log("fileName: " + fileName);
 			context.log("cacheSize: " + cacheSize);
@@ -39,7 +41,10 @@ public class LearningEngineServletContextListener implements ServletContextListe
 				LearningEngine.create(fileName, Integer.parseInt(cacheSize));
 				learningEngine = LearningEngine.open(fileName);
 			}
-
+			if(Integer.parseInt(performInit) != 0) {
+				learningEngine.initializeFiles();
+			}
+			
 			context.log("Learning engine is set up!");
 
 			context.setAttribute(LEARNING_ENGINE, learningEngine);

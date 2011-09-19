@@ -1,4 +1,3 @@
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -21,6 +20,10 @@ import edu.neumont.learningChess.json.Jsonizer;
 
 public class AnalyzeGameHistoryServlet extends HttpServlet {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private static final String dbUrl = "jdbc:mysql://chess.neumont.edu/learningchess";
 	private static final String dbClass = "com.mysql.jdbc.Driver";
 
@@ -33,6 +36,7 @@ public class AnalyzeGameHistoryServlet extends HttpServlet {
 			responseString = analyzeGameHistory(context, request) + "";
 		} catch (Throwable t) {
 			if (MainServlet.LOG_ERROR) {
+				context.log("Exception in analyze history!");
 				ByteArrayOutputStream bos = new ByteArrayOutputStream();
 				PrintStream printStream = new PrintStream(bos);
 				t.printStackTrace(printStream);

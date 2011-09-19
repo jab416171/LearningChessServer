@@ -15,6 +15,11 @@ import edu.neumont.learningChess.engine.LearningEngine;
 import edu.neumont.learningChess.json.Jsonizer;
 
 public class GameStateInfoServlet extends HttpServlet {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ServletContext context = request.getSession().getServletContext();

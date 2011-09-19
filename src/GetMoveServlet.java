@@ -15,6 +15,11 @@ import edu.neumont.learningChess.json.Jsonizer;
 import edu.neumont.learningChess.model.Move;
 
 public class GetMoveServlet extends HttpServlet {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -24,6 +29,7 @@ public class GetMoveServlet extends HttpServlet {
 			responseString = getMove(context, request) + "";
 		} catch (Throwable t) {
 			if (MainServlet.LOG_ERROR) {
+				context.log("Exception in get move!");
 				ByteArrayOutputStream bos = new ByteArrayOutputStream();
 				PrintStream printStream = new PrintStream(bos);
 				t.printStackTrace(printStream);
