@@ -15,6 +15,16 @@
   	<servlet-class>AnalyzeGameHistoryServlet</servlet-class>
   </servlet>
   <servlet>
+  	<display-name>LoginServlet</display-name>
+  	<servlet-name>LoginServlet</servlet-name>
+  	<servlet-class>LoginServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<display-name>RegisterServlet</display-name>
+  	<servlet-name>RegisterServlet</servlet-name>
+  	<servlet-class>RegisterServlet</servlet-class>
+  </servlet>
+  <servlet>
   	<display-name>GetMoveServlet</display-name>
   	<servlet-name>GetMoveServlet</servlet-name>
   	<servlet-class>GetMoveServlet</servlet-class>
@@ -31,6 +41,14 @@
   <servlet-mapping>
     <servlet-name>GetMoveServlet</servlet-name>
     <url-pattern>/getmove</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>RegisterServlet</servlet-name>
+    <url-pattern>/register</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>LoginServlet</servlet-name>
+    <url-pattern>/login</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>AnalyzeGameHistoryServlet</servlet-name>

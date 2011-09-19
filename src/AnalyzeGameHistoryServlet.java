@@ -25,8 +25,6 @@ public class AnalyzeGameHistoryServlet extends HttpServlet {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static final String dbUrl = "jdbc:mysql://chess.neumont.edu:3306/learningchess";
-	private static final String dbClass = "com.mysql.jdbc.Driver";
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -74,8 +72,8 @@ public class AnalyzeGameHistoryServlet extends HttpServlet {
 
 	private void writeToDb(Calendar datePlayed, String whiteName, String blackName, PlayerType winnerType, int moveCount) {
 		try {
-			Class.forName(dbClass);
-			Connection con = DriverManager.getConnection(dbUrl,"root","Ch3ssCh3ss");
+			Class.forName(MainServlet.dbClass);
+			Connection con = DriverManager.getConnection(MainServlet.dbUrl,"root","Ch3ssCh3ss");
 			
 			PreparedStatement stmt = con.prepareStatement("insert into History(datePlayed,whiteName,blackName,winnerType,moveCount) values(?, ?, ?, ?, ?)");
 			stmt.setDate(1, new java.sql.Date(datePlayed.getTimeInMillis()));
