@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import edu.neumont.learningChess.api.MoveHistory;
+import edu.neumont.learningChess.controller.GameController.PlayerType;
 import edu.neumont.learningChess.engine.LearningEngine;
 import edu.neumont.learningChess.json.Jsonizer;
 
@@ -24,7 +25,7 @@ public class AnalyzeGameHistoryServlet extends HttpServlet {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static final String dbUrl = "jdbc:mysql://chess.neumont.edu/learningchess";
+	private static final String dbUrl = "jdbc:mysql://chess.neumont.edu:3306/learningchess";
 	private static final String dbClass = "com.mysql.jdbc.Driver";
 
 	@Override
@@ -61,20 +62,26 @@ public class AnalyzeGameHistoryServlet extends HttpServlet {
 			context.log("Request: " + jsonString);
 		}
 		MoveHistory gameStateHistory = Jsonizer.dejsonize(jsonString, MoveHistory.class);
-
+		
 		LearningEngine learningEngine = (LearningEngine) context.getAttribute(MainServlet.LEARNING_ENGINE);
+		String whiteName = gameStateHistory.getWhitePlayerName();
+		String blackName = gameStateHistory.getBlackPlayerName();
+		PlayerType winnerType = gameStateHistory.getWinnerType();
+		int moveCount = gameStateHistory.getMoveCount();
+		writeToDb(Calendar.getInstance(), whiteName, blackName, winnerType, moveCount);
 		return learningEngine.analyzeGameHistory(gameStateHistory);
 	}
 
-	private void writeToDb(Calendar datePlayed, String whiteName, String blackName, int winnerType, int moveCount) {
+	private void writeToDb(Calendar datePlayed, String whiteName, String blackName, PlayerType winnerType, int moveCount) {
 		try {
 			Class.forName(dbClass);
-			Connection con = DriverManager.getConnection(dbUrl);
-			PreparedStatement stmt = con.prepareStatement("insert into History values(?, ?, ?, ?, ?");
+			Connection con = DriverManager.getConnection(dbUrl,"root","Ch3ssCh3ss");
+			
+			PreparedStatement stmt = con.prepareStatement("insert into History(datePlayed,whiteName,blackName,winnerType,moveCount) values(?, ?, ?, ?, ?)");
 			stmt.setDate(1, new java.sql.Date(datePlayed.getTimeInMillis()));
 			stmt.setString(2, whiteName);
 			stmt.setString(3, blackName);
-			stmt.setInt(4, winnerType);
+			stmt.setInt(4, winnerType.getValue());
 			stmt.setInt(5, moveCount);
 			stmt.executeUpdate();
 		} catch (ClassNotFoundException e) {
