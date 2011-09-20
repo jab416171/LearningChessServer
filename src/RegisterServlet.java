@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+
 import edu.neumont.learningChess.json.Jsonizer;
 import edu.neumont.learningChess.model.User;
 
@@ -46,11 +48,14 @@ public class RegisterServlet extends HttpServlet {
 
 		Class.forName(MainServlet.dbClass);
 		Connection con = DriverManager.getConnection(MainServlet.dbUrl, "root", "Ch3ssCh3ss");
-
-		PreparedStatement stmt = con.prepareStatement("insert into user(username,password) values(?, ?)");
-		stmt.setString(1, user.getUsername());
-		stmt.setString(2, user.getPassword());
-		stmt.executeUpdate();
+		try {
+			PreparedStatement stmt = con.prepareStatement("insert into user(username,password) values(?, ?)");
+			stmt.setString(1, user.getUsername());
+			stmt.setString(2, user.getPassword());
+			stmt.executeUpdate();
+		} catch(MySQLIntegrityConstraintViolationException e) {
+			return null;
+		}
 		return Jsonizer.jsonize(user);
 	}
 }
